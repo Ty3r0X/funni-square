@@ -13,6 +13,7 @@ CFLAGS :=\
 
 # Sources / Results
 SRC :=\
+        src/rectangle.c \
         src/init.c \
 	src/main.c
 

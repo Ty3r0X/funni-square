@@ -1,0 +1,6 @@
+---
+Checks:          'performance-*,portability-*,readability-*,bugprone-*,concurrency-*,llvm-*,clang-analyzer-core.*,clang-analyzer-nullability.*,clang-analyzer-optin.portability.UnixAPI,clang-analyzer-security.*,clang-analyzer-unix.*,clang-analyzer-valist.*,clang-analyzer-apiModeling.*,cert-*-c,-readability-isolate-declaration,-readability-braces-around-statements,-readability-named-parameter'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     file

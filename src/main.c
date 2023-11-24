@@ -25,6 +25,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <stdlib.h>
+#define HEX_POKE 0xFF
 
 int
 main (int argc, char *argv[]) {
@@ -40,10 +41,10 @@ main (int argc, char *argv[]) {
 		rectangle->y = rand () % 500;
 
 		SDL_SetRenderTarget (main_render, background);
-		SDL_SetRenderDrawColor (main_render, 0x00, 0x00, 0x00, 0x00);
+		SDL_SetRenderDrawColor (main_render, 0x00, HEX_POKE, 0x00, 0x00);
 		SDL_RenderClear (main_render);
 		SDL_RenderDrawRect (main_render, rectangle);
-		SDL_SetRenderDrawColor (main_render, 0xFF, 0x00, 0x00, 0x00);
+		SDL_SetRenderDrawColor (main_render, HEX_POKE, 0x00, 0x00, 0x00);
 		SDL_RenderFillRect (main_render, rectangle);
 		SDL_SetRenderTarget (main_render, NULL);
 		SDL_RenderCopy (main_render, background, NULL, NULL);
@@ -56,8 +57,8 @@ main (int argc, char *argv[]) {
 		while (SDL_PollEvent (main_event)) {
 			switch (main_event->type) {
 				case SDL_MOUSEMOTION:
-					printf ("Mouse motion detected!\n");
-					printf ("Current mouse position: (%d,%d)\t", main_event->motion.x, main_event->motion.y);
+					if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle))
+						printf ("You touched the square! X position: %d, Y position %d\n", main_event->motion.x, main_event->motion.y);
 					break;
 
 					/* Yes I acknowledge this is a very hacky way to exit the program, my apologies */
