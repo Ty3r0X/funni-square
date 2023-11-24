@@ -13,8 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: install sdl2
-      run: apt update && apt install libsdl2-dev
+    - uses: libsdl-org/setup-sdl@main
+      id: sdl
+      with:
+        install-linux-dependencies: true
+        version: sdl2-latest
     - name: make
       run: make
     - name: Upload a Build Artifact
