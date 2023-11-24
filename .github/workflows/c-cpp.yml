@@ -12,12 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: libsdl-org/setup-sdl@main
-      id: sdl
-      with:
-        install-linux-dependencies: true
-        version: sdl2-latest
+    - name: install sdl2
+      run: sudo apt update && sudo apt install git libsdl2-dev
+    - name: snatch sauce code
+      run: git clone https://github.com/Ty3r0X/funni-square && cd funni-square
     - name: make
       run: make
     - name: Upload a Build Artifact
