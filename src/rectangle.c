@@ -23,6 +23,13 @@
 
 #include "window.h"
 
+#include <SDL2/SDL_stdinc.h>
+
+struct coords {
+	Uint16 x;
+	Uint16 y;
+};
+
 /* Function to check if a coordinate (x, y) is inside a rectangle */
 int
 check_interaction_in_rect (int x_cursor, int y_cursor, struct SDL_Rect *rect) {

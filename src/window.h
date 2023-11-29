@@ -25,6 +25,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,10 @@ extern SDL_Renderer *main_render;
 extern SDL_Texture  *background;
 extern SDL_Rect     *rectangle;
 extern SDL_Event    *main_event;
+struct pos {
+	Uint16 x;
+	Uint16 y;
+};
 
 int init_program (void);
 int check_interaction_in_rect (int x_cursor, int y_cursor, struct SDL_Rect *rect);
