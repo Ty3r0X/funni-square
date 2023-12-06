@@ -26,10 +26,31 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 #define HEX_POKE 0xFF
+
+Uint8 bg_red   = 0x00;
+Uint8 bg_green = HEX_POKE;
+Uint8 bg_blue  = 0x00;
+
+void *
+drawScreen (void *vargp) {
+	while ((bool *) vargp) {
+		SDL_SetRenderTarget (main_render, background);
+		SDL_SetRenderDrawColor (main_render, bg_red, bg_green, bg_blue, 0x00);
+		SDL_RenderClear (main_render);
+		SDL_RenderDrawRect (main_render, rectangle);
+		SDL_SetRenderDrawColor (main_render, HEX_POKE, 0x00, 0x00, 0x00);
+		SDL_RenderFillRect (main_render, rectangle);
+		SDL_SetRenderTarget (main_render, NULL);
+		SDL_RenderCopy (main_render, background, NULL, NULL);
+		SDL_RenderPresent (main_render);
+	}
+	return NULL;
+}
 
 int
 main (int argc, char *argv[]) {
@@ -48,21 +69,12 @@ main (int argc, char *argv[]) {
 	rectangle->x = (int) SCREEN_WIDTH / 2;
 	rectangle->y = (int) SCREEN_HEIGHT / 2;
 
-	Uint8 bg_red   = 0x00;
-	Uint8 bg_green = HEX_POKE;
-	Uint8 bg_blue  = 0x00;
+	bool draw_status = 1;
+
+	pthread_t draw_thread_id;
+	pthread_create (&draw_thread_id, NULL, drawScreen, &draw_status);
 
 	for (;;) {
-
-		SDL_SetRenderTarget (main_render, background);
-		SDL_SetRenderDrawColor (main_render, bg_red, bg_green, bg_blue, 0x00);
-		SDL_RenderClear (main_render);
-		SDL_RenderDrawRect (main_render, rectangle);
-		SDL_SetRenderDrawColor (main_render, HEX_POKE, 0x00, 0x00, 0x00);
-		SDL_RenderFillRect (main_render, rectangle);
-		SDL_SetRenderTarget (main_render, NULL);
-		SDL_RenderCopy (main_render, background, NULL, NULL);
-		SDL_RenderPresent (main_render);
 
 		/* Constantly initialize boolean values for corners, each for loop
 		 * iteration they change values */
@@ -86,7 +98,7 @@ main (int argc, char *argv[]) {
 
 		if (main_event->type == SDL_QUIT) {
 			printf ("Quit event detected, now exiting. See ya! :)\n");
-			printf ("MMXXIII Ty3r0X - The Eye shall forsee...\n");
+			draw_status = 0;
 			SDL_DestroyRenderer (main_render);
 			SDL_DestroyWindow (window);
 			SDL_Quit ();
@@ -96,13 +108,16 @@ main (int argc, char *argv[]) {
 		if (main_event->type == SDL_MOUSEMOTION)
 			if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle)) {
 				printf ("Mouse cursor is inside the square at position (%d,%d)\n", main_event->motion.x, main_event->motion.y);
+
 				ray.x *= -1;
 				ray.y *= -1;
+
 				rectangle->x = rand () % 500;
 				rectangle->y = rand () % 500;
-				bg_red       = rand () & HEX_POKE;
-				bg_green     = rand () & HEX_POKE;
-				bg_blue      = rand () & HEX_POKE;
+
+				bg_red   = rand () & HEX_POKE;
+				bg_green = rand () & HEX_POKE;
+				bg_blue  = rand () & HEX_POKE;
 			}
 
 		/* Constantly increment / decrement rectangle position */

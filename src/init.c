@@ -44,6 +44,9 @@ SDL_Rect     *rectangle;
 
 int
 init_program (void) {
+
+	printf ("MMXXIII Ty3r0X - The Eye shall forsee...\n");
+
 	/* Initialization Checks */
 
 	if (SDL_Init (SDL_INIT_VIDEO) != 0) {
