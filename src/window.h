@@ -45,12 +45,15 @@ extern SDL_Renderer *main_render;
 extern SDL_Texture  *background;
 extern SDL_Rect     *rectangle;
 extern SDL_Event    *main_event;
+extern struct coords ray;
 
 extern Uint8 bg_red;
 extern Uint8 bg_green;
 extern Uint8 bg_blue;
 
-int init_program (void);
-int check_interaction_in_rect (int x_cursor, int y_cursor, struct SDL_Rect *rect);
+int   init_program (void);
+int   check_interaction_in_rect (int x_cursor, int y_cursor, struct SDL_Rect *rect);
+void *drawScreen (void *vargp);
+void  modifyRectanglePosition (void);
 
 #endif

@@ -36,6 +36,36 @@ Uint8 bg_red   = 0x00;
 Uint8 bg_green = HEX_POKE;
 Uint8 bg_blue  = 0x00;
 
+struct coords {
+	int x;
+	int y;
+} ray;
+
+void
+modifyRectanglePosition () {
+
+	/* Constantly initialize boolean values for corners, each for loop
+	 * iteration they change values */
+
+	bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH);
+	bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT);
+
+	/* Normally the rect constantly goes up diagonally, if it reaches a
+	 * corner the next position gets multiplied with -1 on its respective
+	 * axis so it goes the opposite direction*/
+
+	if (x_limit)
+		ray.x *= -1;
+
+	if (y_limit)
+		ray.y *= -1;
+
+	/* Constantly increment / decrement rectangle position */
+
+	rectangle->x = rectangle->x + (1 * ray.x);
+	rectangle->y = rectangle->y + (1 * ray.y);
+}
+
 void *
 drawScreen (void *vargp) {
 	while ((bool *) vargp) {
@@ -48,6 +78,7 @@ drawScreen (void *vargp) {
 		SDL_SetRenderTarget (main_render, NULL);
 		SDL_RenderCopy (main_render, background, NULL, NULL);
 		SDL_RenderPresent (main_render);
+		modifyRectanglePosition ();
 	}
 	return NULL;
 }
@@ -57,11 +88,6 @@ main (int argc, char *argv[]) {
 
 	if (init_program () != EXIT_SUCCESS)
 		return EXIT_FAILURE;
-
-	struct coords {
-		int x;
-		int y;
-	} ray;
 
 	ray.x = 1;
 	ray.y = 1;
@@ -76,25 +102,9 @@ main (int argc, char *argv[]) {
 
 	for (;;) {
 
-		/* Constantly initialize boolean values for corners, each for loop
-		 * iteration they change values */
-
-		bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH);
-		bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT);
-
-		/* Normally the rect constantly goes up diagonally, if it reaches a
-		 * corner the next position gets multiplied with -1 on its respective
-		 * axis so it goes the opposite direction*/
-
-		if (x_limit)
-			ray.x *= -1;
-
-		if (y_limit)
-			ray.y *= -1;
-
 		/* Constantly check keyboard / mouse events */
 
-		SDL_PollEvent (main_event);
+		SDL_WaitEvent (main_event);
 
 		if (main_event->type == SDL_QUIT) {
 			printf ("Quit event detected, now exiting. See ya! :)\n");
@@ -119,11 +129,6 @@ main (int argc, char *argv[]) {
 				bg_green = rand () & HEX_POKE;
 				bg_blue  = rand () & HEX_POKE;
 			}
-
-		/* Constantly increment / decrement rectangle position */
-
-		rectangle->x = rectangle->x + (1 * ray.x);
-		rectangle->y = rectangle->y + (1 * ray.y);
 
 		/*while (SDL_PollEvent (main_event)) {
 		        switch (main_event->type) {
