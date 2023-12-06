@@ -48,10 +48,14 @@ main (int argc, char *argv[]) {
 	rectangle->x = (int) SCREEN_WIDTH / 2;
 	rectangle->y = (int) SCREEN_HEIGHT / 2;
 
+	Uint8 bg_red   = 0x00;
+	Uint8 bg_green = HEX_POKE;
+	Uint8 bg_blue  = 0x00;
+
 	for (;;) {
 
 		SDL_SetRenderTarget (main_render, background);
-		SDL_SetRenderDrawColor (main_render, 0x00, HEX_POKE, 0x00, 0x00);
+		SDL_SetRenderDrawColor (main_render, bg_red, bg_green, bg_blue, 0x00);
 		SDL_RenderClear (main_render);
 		SDL_RenderDrawRect (main_render, rectangle);
 		SDL_SetRenderDrawColor (main_render, HEX_POKE, 0x00, 0x00, 0x00);
@@ -60,14 +64,23 @@ main (int argc, char *argv[]) {
 		SDL_RenderCopy (main_render, background, NULL, NULL);
 		SDL_RenderPresent (main_render);
 
+		/* Constantly initialize boolean values for corners, each for loop
+		 * iteration they change values */
+
 		bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH);
 		bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT);
+
+		/* Normally the rect constantly goes up diagonally, if it reaches a
+		 * corner the next position gets multiplied with -1 on its respective
+		 * axis so it goes the opposite direction*/
 
 		if (x_limit)
 			ray.x *= -1;
 
 		if (y_limit)
 			ray.y *= -1;
+
+		/* Constantly check keyboard / mouse events */
 
 		SDL_PollEvent (main_event);
 
@@ -79,6 +92,20 @@ main (int argc, char *argv[]) {
 			SDL_Quit ();
 			return EXIT_SUCCESS;
 		}
+
+		if (main_event->type == SDL_MOUSEMOTION)
+			if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle)) {
+				printf ("Mouse cursor is inside the square at position (%d,%d)\n", main_event->motion.x, main_event->motion.y);
+				ray.x *= -1;
+				ray.y *= -1;
+				rectangle->x = rand () % 500;
+				rectangle->y = rand () % 500;
+				bg_red       = rand () & HEX_POKE;
+				bg_green     = rand () & HEX_POKE;
+				bg_blue      = rand () & HEX_POKE;
+			}
+
+		/* Constantly increment / decrement rectangle position */
 
 		rectangle->x = rectangle->x + (1 * ray.x);
 		rectangle->y = rectangle->y + (1 * ray.y);

@@ -70,7 +70,7 @@ init_program (void) {
 
 	/* Initialize rectangle*/
 
-	rectangle = calloc (1, sizeof (SDL_Rect));
+	rectangle    = calloc (1, sizeof (SDL_Rect));
 	rectangle->w = 100;
 	rectangle->h = 100;
 
