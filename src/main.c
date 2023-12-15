@@ -67,8 +67,8 @@ main (int argc, char *argv[]) {
 		/* Constantly initialize boolean values for corners, each for loop
 		 * iteration they change values */
 
-		bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH);
-		bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT);
+		bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH - RECT_SIZE);
+		bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT - RECT_SIZE);
 
 		/* Normally the rect constantly goes up diagonally, if it reaches a
 		 * corner the next position gets multiplied with -1 on its respective
@@ -109,6 +109,8 @@ main (int argc, char *argv[]) {
 
 		rectangle->x = rectangle->x + (1 * ray.x);
 		rectangle->y = rectangle->y + (1 * ray.y);
+
+		SDL_Delay (3);
 
 		/*while (SDL_PollEvent (main_event)) {
 		        switch (main_event->type) {

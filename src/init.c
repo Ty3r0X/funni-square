@@ -71,8 +71,8 @@ init_program (void) {
 	/* Initialize rectangle*/
 
 	rectangle    = calloc (1, sizeof (SDL_Rect));
-	rectangle->w = 100;
-	rectangle->h = 100;
+	rectangle->w = RECT_SIZE;
+	rectangle->h = RECT_SIZE;
 
 	/* A new variable is created called main_event, which is a SDL_Event type, which itself is a structure
 	 * of multiple structures... of events... */
