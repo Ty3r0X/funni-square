@@ -67,8 +67,8 @@ main (int argc, char *argv[]) {
 		/* Constantly initialize boolean values for corners, each for loop
 		 * iteration they change values */
 
-		bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH - RECT_SIZE);
-		bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT - RECT_SIZE);
+		bool x_limit = (rectangle->x <= 0 || rectangle->x >= SCREEN_WIDTH - RECT_SIZE);
+		bool y_limit = (rectangle->y <= 0 || rectangle->y >= SCREEN_HEIGHT - RECT_SIZE);
 
 		/* Normally the rect constantly goes up diagonally, if it reaches a
 		 * corner the next position gets multiplied with -1 on its respective
@@ -112,26 +112,5 @@ main (int argc, char *argv[]) {
 
 		SDL_Delay (3);
 
-		/*while (SDL_PollEvent (main_event)) {
-		        switch (main_event->type) {
-		                case SDL_MOUSEMOTION:
-		                        if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle)) {
-		                                rectangle->x = rand () % 500;
-		                                rectangle->y = rand () % 500;
-		                                printf ("You touched the square! X position: %d, Y position %d\n", main_event->motion.x, main_event->motion.y);
-		                        }
-		                        break;
-
-		                case SDL_WINDOWEVENT:
-		                        printf ("Window position is being altered!\n");
-		                        printf ("Current window position: (%d,%d)\t", main_event->window.data1, main_event->window.data2);
-		                        break;
-
-		                default:
-		                        printf ("Unhandled event\n\n");
-		                        break;
-		        }
-		}
-	*/
 	}
 }
