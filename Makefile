@@ -5,13 +5,13 @@ OBJ := $(SRC:.c=.o)
 
 all: $(OBJ) $(OUT)
 %.o: %.c
-	$(CC) -o $@ -c $(CFLAGS) $<
+	$(CC) $< -c $(CFLAGS) -o "$@"
 clean:
 	rm -f $(OBJ) $(OUT)
 
 ifneq ($(OUT),)
 $(OUT): $(OBJ)
-	$(CC) -o "$@" $(LDFLAGS) $^
+	$(CC) $^ $(LDFLAGS) -o "$@"
 endif
 
 .PHONY: all clean
