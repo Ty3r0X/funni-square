@@ -40,6 +40,8 @@
 #define COLOR_G 0xA5
 #define COLOR_B 0x00
 
+#define RECT_SIZE 100
+
 extern SDL_Window   *window;
 extern SDL_Renderer *main_render;
 extern SDL_Texture  *background;

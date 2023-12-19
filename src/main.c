@@ -47,8 +47,8 @@ modifyRectanglePosition () {
 	/* Constantly initialize boolean values for corners, each for loop
 	 * iteration they change values */
 
-	bool x_limit = (rectangle->x == 0 || rectangle->x == SCREEN_WIDTH);
-	bool y_limit = (rectangle->y == 0 || rectangle->y == SCREEN_HEIGHT);
+	bool x_limit = (rectangle->x <= 0 || rectangle->x >= SCREEN_WIDTH - RECT_SIZE);
+	bool y_limit = (rectangle->y <= 0 || rectangle->y >= SCREEN_HEIGHT - RECT_SIZE);
 
 	/* Normally the rect constantly goes up diagonally, if it reaches a
 	 * corner the next position gets multiplied with -1 on its respective
@@ -122,34 +122,19 @@ main (int argc, char *argv[]) {
 				ray.x *= -1;
 				ray.y *= -1;
 
-				rectangle->x = rand () % 500;
-				rectangle->y = rand () % 500;
+				rectangle->x = rand () % (int) (SCREEN_WIDTH - 1 - RECT_SIZE);
+				rectangle->y = rand () % (int) (SCREEN_HEIGHT - 1 - RECT_SIZE);
 
 				bg_red   = rand () & HEX_POKE;
 				bg_green = rand () & HEX_POKE;
 				bg_blue  = rand () & HEX_POKE;
 			}
 
-		/*while (SDL_PollEvent (main_event)) {
-		        switch (main_event->type) {
-		                case SDL_MOUSEMOTION:
-		                        if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle)) {
-		                                rectangle->x = rand () % 500;
-		                                rectangle->y = rand () % 500;
-		                                printf ("You touched the square! X position: %d, Y position %d\n", main_event->motion.x, main_event->motion.y);
-		                        }
-		                        break;
+		/* Constantly increment / decrement rectangle position */
 
-		                case SDL_WINDOWEVENT:
-		                        printf ("Window position is being altered!\n");
-		                        printf ("Current window position: (%d,%d)\t", main_event->window.data1, main_event->window.data2);
-		                        break;
+		rectangle->x = rectangle->x + (1 * ray.x);
+		rectangle->y = rectangle->y + (1 * ray.y);
 
-		                default:
-		                        printf ("Unhandled event\n\n");
-		                        break;
-		        }
-		}
-	*/
+		SDL_Delay (3);
 	}
 }
