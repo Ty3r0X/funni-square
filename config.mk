@@ -1,12 +1,13 @@
 # Defaults
-CC      := clang
+CC      := gcc
 DEBUG   := 1
 STATIC  := 0
+PLATFORM := linux
 
 LDFLAGS :=
 CFLAGS :=\
 	-std=c99 \
-	-Weverything \
+	-Werror\
 	-Wno-padded \
 	-Wno-disabled-macro-expansion \
 	-pedantic
@@ -19,7 +20,8 @@ SRC :=\
 
 LIBDIR :=
 LIB :=\
-	c\
+        c\
+	SDL2main\
 	SDL2\
 
 INCDIR :=\

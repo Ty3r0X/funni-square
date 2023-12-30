@@ -32,8 +32,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define THIRTYTWO_BIT 32
-
 /* Global variables */
 
 SDL_Window   *window;
