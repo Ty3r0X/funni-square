@@ -23,9 +23,11 @@
 #define WINDOW_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_ttf.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,14 +43,24 @@
 
 #define RECT_SIZE 100
 
+#define COUNTER_BOX_X     10
+#define COUNTER_BOX_Y     530
+#define COUNTER_TEXT_SIZE 48
+
 extern SDL_Window   *window;
 extern SDL_Renderer *main_render;
 extern SDL_Texture  *background;
 extern SDL_Rect     *rectangle;
 extern SDL_Event    *main_event;
+extern SDL_Surface  *text_surface;
+extern SDL_Texture  *text_texture;
+extern TTF_Font     *text_font;
+extern SDL_Color    *text_color;
+extern SDL_Rect      counter_box;
+
 struct pos {
-	Uint16 x;
-	Uint16 y;
+	int x;
+	int y;
 };
 
 int init_program (void);

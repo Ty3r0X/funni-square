@@ -29,15 +29,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define HEX_POKE 0xFF
+#define HEX_POKE       0xFF
+#define COUNTER_DIGITS 100
 
 int
 main (int argc, char *argv[]) {
 
-	struct coords {
-		int x;
-		int y;
-	} ray;
+	struct pos ray;
+	int        counter = 0;
 
 	Uint8 bg_red   = 0x00;
 	Uint8 bg_green = HEX_POKE;
@@ -57,20 +56,47 @@ main (int argc, char *argv[]) {
 
 	for (;;) {
 
+		/* Initialize counter array - max 100 digits */
+
+		char counter_text[COUNTER_DIGITS];
+
 		/* Constantly initialize boolean values for corners, each for loop
 		 * iteration they change values */
 
 		bool x_limit = (rectangle->x <= 0 || rectangle->x >= SCREEN_WIDTH - RECT_SIZE);
 		bool y_limit = (rectangle->y <= 0 || rectangle->y >= SCREEN_HEIGHT - RECT_SIZE);
 
+		/* Insert counter values into the array */
+
+		snprintf (counter_text, sizeof (counter_text), "%d", counter);
+
+		text_surface = TTF_RenderText_Solid (text_font, counter_text, *text_color);
+		text_texture = SDL_CreateTextureFromSurface (main_render, text_surface);
+
+		/* Snatch counter_box's width and size by querying text_surface */
+
+		SDL_QueryTexture (text_texture, NULL, NULL, &counter_box.w, &counter_box.h);
+
+		/* Background render*/
+
 		SDL_SetRenderTarget (main_render, background);
 		SDL_SetRenderDrawColor (main_render, bg_red, bg_green, bg_blue, 0x00);
 		SDL_RenderClear (main_render);
+
+		/* Rectangle render */
+
 		SDL_RenderDrawRect (main_render, rectangle);
 		SDL_SetRenderDrawColor (main_render, HEX_POKE, 0x00, 0x00, 0x00);
 		SDL_RenderFillRect (main_render, rectangle);
 		SDL_SetRenderTarget (main_render, NULL);
 		SDL_RenderCopy (main_render, background, NULL, NULL);
+
+		/* Counter render */
+
+		SDL_RenderCopy (main_render, text_texture, NULL, &counter_box);
+
+		/* All finished, time to show on screen */
+
 		SDL_RenderPresent (main_render);
 
 		/* Normally the rect constantly goes up diagonally, if it reaches a
@@ -98,7 +124,9 @@ main (int argc, char *argv[]) {
 
 				case SDL_MOUSEMOTION:
 					if (check_interaction_in_rect (main_event->motion.x, main_event->motion.y, rectangle)) {
-						printf ("Mouse cursor is inside the square at position (%d,%d)\n", main_event->motion.x, main_event->motion.y);
+						printf ("Mouse cursor is inside the square at position (%d,%d)\n",
+						        main_event->motion.x,
+						        main_event->motion.y);
 						ray.x *= -1;
 						ray.y *= -1;
 						rectangle->x = rand () % (int) (SCREEN_WIDTH - 1 - RECT_SIZE);
@@ -106,18 +134,20 @@ main (int argc, char *argv[]) {
 						bg_red       = rand () & HEX_POKE;
 						bg_green     = rand () & HEX_POKE;
 						bg_blue      = rand () & HEX_POKE;
+						counter++;
 					}
 					break;
 
 				default:
 					break;
-
-					/* Constantly increment / decrement rectangle position */
-
-					rectangle->x = rectangle->x + (1 * ray.x);
-					rectangle->y = rectangle->y + (1 * ray.y);
-
-					SDL_Delay (3);
 			}
+		/* Constantly increment / decrement rectangle position */
+
+		rectangle->x = rectangle->x + (1 * ray.x);
+		rectangle->y = rectangle->y + (1 * ray.y);
+
+		/* Add a delay, let the CPU breathe */
+
+		SDL_Delay (3);
 	}
 }

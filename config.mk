@@ -23,6 +23,7 @@ LIB :=\
         c\
 	SDL2main\
 	SDL2\
+	SDL2_ttf
 
 INCDIR :=\
 	src/
