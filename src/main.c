@@ -101,8 +101,8 @@ main (int argc, char *argv[]) {
 						printf ("Mouse cursor is inside the square at position (%d,%d)\n", main_event->motion.x, main_event->motion.y);
 						ray.x *= -1;
 						ray.y *= -1;
-						rectangle->x = rand () % 500;
-						rectangle->y = rand () % 500;
+						rectangle->x = rand () % (int) (SCREEN_WIDTH - 1 - RECT_SIZE);
+						rectangle->y = rand () % (int) (SCREEN_HEIGHT - 1 - RECT_SIZE);
 						bg_red       = rand () & HEX_POKE;
 						bg_green     = rand () & HEX_POKE;
 						bg_blue      = rand () & HEX_POKE;
@@ -111,13 +111,13 @@ main (int argc, char *argv[]) {
 
 				default:
 					break;
+
+					/* Constantly increment / decrement rectangle position */
+
+					rectangle->x = rectangle->x + (1 * ray.x);
+					rectangle->y = rectangle->y + (1 * ray.y);
+
+					SDL_Delay (3);
 			}
-
-		/* Constantly increment / decrement rectangle position */
-
-		rectangle->x = rectangle->x + (1 * ray.x);
-		rectangle->y = rectangle->y + (1 * ray.y);
-
-		SDL_Delay (3);
 	}
 }
