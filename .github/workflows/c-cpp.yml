@@ -12,12 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: install sdl2
+    - name: Install SDL2 dependencies
       run: sudo apt update && sudo apt install git libsdl2-dev
-    - name: see what is inside
-      run: ls -al
-    - name: make
+      
+    - name: Snatch source code
+      uses: actions/checkout@v3
+
+    - name: -Debug- Ensure directory is ready to go for building
+      run: pwd && ls -al
+      
+    - name: Make
       run: make
+      
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.3
       with:
