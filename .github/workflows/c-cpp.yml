@@ -14,10 +14,8 @@ jobs:
     steps:
     - name: install sdl2
       run: sudo apt update && sudo apt install git libsdl2-dev
-    - name: snatch sauce code
-      run: git clone https://github.com/Ty3r0X/funni-square
-    - name: enter directory
-      run: cd funni-square && pwd
+    - name: see what is inside
+      run: ls -al
     - name: make
       run: make
     - name: Upload a Build Artifact
