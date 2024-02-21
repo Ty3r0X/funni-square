@@ -29,11 +29,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define HEX_POKE       0xFF
-#define COUNTER_DIGITS 100
+#define HEX_POKE     0xFF
+#define COUNTER_SIZE 100
 
 int
-main (int argc, char *argv[]) {
+main (int argc, const char *argv[]) {
 
 	struct pos ray;
 	int        counter = 0;
@@ -42,8 +42,13 @@ main (int argc, char *argv[]) {
 	Uint8 bg_green = HEX_POKE;
 	Uint8 bg_blue  = 0x00;
 
+	printf ("MMXXIII Ty3r0X\n");
+
 	if (init_program () != EXIT_SUCCESS)
 		return EXIT_FAILURE;
+
+	/* Print argv - useless but used to stop
+	 * my compiler from yelling */
 
 	for (int i = 0; i < argc; i++)
 		printf ("%s\n", argv[i]);
@@ -56,9 +61,9 @@ main (int argc, char *argv[]) {
 
 	for (;;) {
 
-		/* Initialize counter array - max 100 digits */
+		/* Initialize counter array */
 
-		char counter_text[COUNTER_DIGITS];
+		char counter_text[COUNTER_SIZE];
 
 		/* Constantly initialize boolean values for corners, each for loop
 		 * iteration they change values */
@@ -115,8 +120,7 @@ main (int argc, char *argv[]) {
 			switch (main_event->type) {
 
 				case SDL_QUIT:
-					printf ("Quit event detected, now exiting. See ya! :)\n");
-					printf ("MMXXIII Ty3r0X - The Eye shall forsee...\n");
+					printf ("Quit event detected, now exiting.\n");
 					SDL_DestroyRenderer (main_render);
 					SDL_DestroyWindow (window);
 					SDL_Quit ();
@@ -127,13 +131,17 @@ main (int argc, char *argv[]) {
 						printf ("Mouse cursor is inside the square at position (%d,%d)\n",
 						        main_event->motion.x,
 						        main_event->motion.y);
+
 						ray.x *= -1;
 						ray.y *= -1;
+
 						rectangle->x = rand () % (int) (SCREEN_WIDTH - 1 - RECT_SIZE);
 						rectangle->y = rand () % (int) (SCREEN_HEIGHT - 1 - RECT_SIZE);
-						bg_red       = rand () & HEX_POKE;
-						bg_green     = rand () & HEX_POKE;
-						bg_blue      = rand () & HEX_POKE;
+
+						bg_red   = rand () & HEX_POKE;
+						bg_green = rand () & HEX_POKE;
+						bg_blue  = rand () & HEX_POKE;
+
 						counter++;
 					}
 					break;
@@ -141,6 +149,7 @@ main (int argc, char *argv[]) {
 				default:
 					break;
 			}
+
 		/* Constantly increment / decrement rectangle position */
 
 		rectangle->x = rectangle->x + (1 * ray.x);

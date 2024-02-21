@@ -88,9 +88,15 @@ init_program (void) {
 
 	counter_box.x = COUNTER_BOX_X;
 	counter_box.y = COUNTER_BOX_Y;
-	text_font     = TTF_OpenFont ("arimo.ttf", COUNTER_TEXT_SIZE);
+
+	text_font = TTF_OpenFont ("arimo.ttf", COUNTER_TEXT_SIZE);
+
+	if (text_font == NULL)
+		fprintf (stderr, "Failed to load counter - arimo.ttf may be missing\n");
+
 	text_surface  = NULL;
 	text_texture  = NULL;
+
 	text_color    = calloc (1, sizeof (SDL_Color));
 	text_color->r = 255;
 	text_color->g = 255;
