@@ -104,6 +104,11 @@ main (int argc, const char *argv[]) {
 
 		SDL_RenderPresent (main_render);
 
+		/* Free memory before next loop iteration */
+
+		SDL_DestroyTexture (text_texture);
+		SDL_FreeSurface (text_surface);
+
 		/* Normally the rect constantly goes up diagonally, if it reaches a
 		 * corner the next position gets multiplied with -1 on its respective
 		 * axis so it goes the opposite direction*/
